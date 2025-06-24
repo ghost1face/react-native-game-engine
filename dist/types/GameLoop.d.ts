@@ -1,4 +1,4 @@
-import * as React from "react";
+import { Component } from "react";
 import { GameLoopProperties } from "./GameLoopProperties";
-export declare class GameLoop extends React.Component<GameLoopProperties> {
+export declare class GameLoop extends Component<GameLoopProperties> {
 }
