@@ -48,10 +48,10 @@ exports.default = ({ triggerPressEventBefore = 200, triggerLongPressEventAfter =
                         touchStart.next(event);
                         break;
                     case "move":
-                        touchStart.next(event);
+                        touchMove.next(event);
                         break;
                     case "end":
-                        touchStart.next(event);
+                        touchEnd.next(event);
                         break;
                 }
             },
