@@ -117,10 +117,10 @@ export default ({
             (touchStart as unknown as Subject<NativeTouchEvent>).next(event);
             break;
           case "move":
-            (touchStart as unknown as Subject<NativeTouchEvent>).next(event);
+            (touchMove as unknown as Subject<NativeTouchEvent>).next(event);
             break;
           case "end":
-            (touchStart as unknown as Subject<NativeTouchEvent>).next(event);
+            (touchEnd as unknown as Subject<NativeTouchEvent>).next(event);
             break;
         }
       },
