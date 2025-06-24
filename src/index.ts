@@ -5,13 +5,12 @@ import DefaultRenderer from "./DefaultRenderer";
 import DefaultTimer from "./DefaultTimer";
 
 export {
-	GameLoop,
-	GameLoop as BasicGameLoop,
-	GameEngine,
-	GameEngine as ComponentEntitySystem,
-	GameEngine as ComponentEntitySystems,
-	DefaultTouchProcessor,
-	DefaultRenderer,
-	DefaultTimer
+  GameLoop,
+  GameLoop as BasicGameLoop,
+  GameEngine,
+  GameEngine as ComponentEntitySystem,
+  GameEngine as ComponentEntitySystems,
+  DefaultTouchProcessor,
+  DefaultRenderer,
+  DefaultTimer,
 };
-

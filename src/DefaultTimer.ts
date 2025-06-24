@@ -2,6 +2,9 @@
 With thanks, https://github.com/FormidableLabs/react-game-kit/blob/master/src/native/utils/game-loop.js
 */
 
+import { GameTimer } from "./types/GameTimer";
+import { GameTimerCallback } from "./types/GameTimerCallback";
+
 /*
 The MIT License (MIT)
 
@@ -14,16 +17,19 @@ The above copyright notice and this permission notice shall be included in all c
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 */
 
-export default class DefaultTimer {
+export default class DefaultTimer implements GameTimer {
+  private subscribers: GameTimerCallback[];
+  private loopId: number | null;
+
   constructor() {
     this.subscribers = [];
     this.loopId = null;
   }
 
-  loop = time => {
+  loop = (time?: number) => {
     if (this.loopId) {
-      this.subscribers.forEach(callback => {
-        callback(time);
+      this.subscribers.forEach((callback) => {
+        callback(time!);
       });
     }
 
@@ -43,12 +49,12 @@ export default class DefaultTimer {
     }
   }
 
-  subscribe(callback) {
+  subscribe(callback: GameTimerCallback) {
     if (this.subscribers.indexOf(callback) === -1)
       this.subscribers.push(callback);
   }
 
-  unsubscribe(callback) {
-    this.subscribers = this.subscribers.filter(s => s !== callback)
+  unsubscribe(callback: GameTimerCallback) {
+    this.subscribers = this.subscribers.filter((s) => s !== callback);
   }
 }
