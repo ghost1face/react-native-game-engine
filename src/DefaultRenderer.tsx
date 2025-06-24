@@ -1,5 +1,4 @@
 import React from "react";
-import { GameRenderer } from "./types/GameRenderer";
 import { GameEngineEntities } from "./types/GameEngineEntities";
 import { LayoutRectangle, ScaledSize } from "react-native";
 
@@ -24,7 +23,7 @@ export default (
       //       {...entity}
       //     />
       //   );
-      // else 
+      // else
       if (typeof entity.renderer === "function")
         return (
           <entity.renderer
