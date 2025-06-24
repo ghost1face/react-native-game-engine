@@ -15,7 +15,7 @@ exports.default = ({ triggerPressEventBefore = 200, triggerLongPressEventAfter =
             event: e,
         })));
         const touchEnd = new rxjs_1.Subject().pipe((0, operators_1.map)((e) => ({ id: e.identifier, type: "end", event: e })));
-        const touchPress = touchStart.pipe((0, operators_1.mergeMap)((e) => touchEnd.pipe((0, operators_1.first)((x) => x.id === e.id), (0, operators_1.timeoutWith)(triggerPressEventBefore, rxjs_1.EMPTY))), (0, operators_1.map)((e) => ({ ...e, type: "press" })));
+        const touchPress = touchStart.pipe((0, operators_1.mergeMap)((e) => touchEnd.pipe((0, operators_1.first)((x) => x.id === e.id), (0, operators_1.timeoutWith)(triggerPressEventBefore, (0, rxjs_1.empty)()))), (0, operators_1.map)((e) => ({ ...e, type: "press" })));
         const touchMoveDelta = (0, rxjs_1.merge)(touchStart, touchMove, touchEnd).pipe((0, operators_1.groupBy)((e) => e.id), (0, operators_1.mergeMap)((group) => group.pipe((0, operators_1.pairwise)(), (0, operators_1.map)(([e1, e2]) => {
             if (e1.type !== "end" && e2.type === "move") {
                 return {

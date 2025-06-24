@@ -1,4 +1,4 @@
-import { Subject, EMPTY, of, merge } from "rxjs";
+import { Subject, EMPTY, of, merge, empty } from "rxjs";
 import {
   mergeMap,
   first,
@@ -53,7 +53,7 @@ export default ({
       mergeMap((e: TouchEvent) =>
         touchEnd.pipe(
           first((x) => x.id === e.id),
-          timeoutWith(triggerPressEventBefore, EMPTY)
+          timeoutWith(triggerPressEventBefore, empty())
         )
       ),
       map((e) => ({ ...e, type: "press" } as TouchEvent))
