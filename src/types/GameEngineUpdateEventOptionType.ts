@@ -4,7 +4,7 @@ import { TimeUpdate } from "./TimeUpdate";
 import { GameEngineEvent } from "./GameEngineEvents";
 
 export interface GameEngineUpdateEventOptionType {
-  dispatch: (event: any) => void;
+  dispatch: (event: GameEngineEvent) => void;
   events: GameEngineEvent[];
   screen: ScaledSize;
   layout: LayoutRectangle | null;
