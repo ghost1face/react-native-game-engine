@@ -1,6 +1,11 @@
-import { GameEngineEntity } from "./GameEngineEntity";
+import { GameEngineEntityOfOptionalType } from "./GameEngineEntity";
 
-export type GameEngineEntities = Record<string | number, GameEngineEntity>;
+export type GameEngineEntities<
+  T extends Record<string | number, GameEngineEntityOfOptionalType> = Record<
+    string | number,
+    GameEngineEntityOfOptionalType
+  >
+> = T;
 
 export type GameEngineEntitiesResolver = Promise<GameEngineEntities>;
 

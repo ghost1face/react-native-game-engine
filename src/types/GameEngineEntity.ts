@@ -9,4 +9,6 @@ export interface GameEngineEntity {
   [key: string]: any;
 }
 
-export type GameEngineEntityOfType<T> = T & GameEngineEntity;
+export type GameEngineEntityOfOptionalType<
+  T extends GameEngineEntity = GameEngineEntity
+> = T & GameEngineEntity;
