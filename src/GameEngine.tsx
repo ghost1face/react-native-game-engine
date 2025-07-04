@@ -59,8 +59,11 @@ type GameEngineState<
 };
 
 export default class GameEngine<
-  TEntities extends Record<string | number, GameEngineEntity>
-> extends Component<GameEngineProperties, GameEngineState<TEntities>> {
+  TEntities extends GameEngineEntityBaseType = GameEngineEntityBaseType
+> extends Component<
+  GameEngineProperties<TEntities>,
+  GameEngineState<TEntities>
+> {
   private timer: GameTimer;
   private touches: TouchEvent[];
   private screen: ScaledSize;
@@ -70,11 +73,11 @@ export default class GameEngine<
   private touchProcessor: TouchProcessorApi | undefined;
   private layout: LayoutRectangle | null;
 
-  constructor(props: GameEngineProperties) {
+  constructor(props: GameEngineProperties<TEntities>) {
     super(props);
 
     this.state = {
-      entities: {} as unknown as TEntities,
+      entities: {} as GameEngineEntities<TEntities>,
     };
 
     this.timer = props.timer || new DefaultTimer();
@@ -116,7 +119,7 @@ export default class GameEngine<
     if (this.touchProcessor?.end) this.touchProcessor.end();
   }
 
-  UNSAFE_componentWillReceiveProps(nextProps: GameEngineProperties) {
+  UNSAFE_componentWillReceiveProps(nextProps: GameEngineProperties<TEntities>) {
     if (nextProps.running !== this.props.running) {
       if (nextProps.running) this.start();
       else this.stop();

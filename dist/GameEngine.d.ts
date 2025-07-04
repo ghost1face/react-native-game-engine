@@ -1,13 +1,13 @@
 import React, { Component } from "react";
 import { LayoutChangeEvent, GestureResponderEvent } from "react-native";
 import { GameEngineProperties } from "./types/GameEngineProperties";
-import { GameEngineEntities, GameEngineEntitiesOrResolver } from "./types/GameEngineEntities";
+import { GameEngineEntities, GameEngineEntitiesOrResolver, GameEngineEntityBaseType } from "./types/GameEngineEntities";
 import { GameEngineEvent } from "./types/GameEngineEvents";
 import { GameEngineEntity } from "./types/GameEngineEntity";
 type GameEngineState<TEntities extends Record<string | number, GameEngineEntity>> = {
     entities: GameEngineEntities<TEntities>;
 };
-export default class GameEngine<TEntities extends Record<string | number, GameEngineEntity>> extends Component<GameEngineProperties, GameEngineState<TEntities>> {
+export default class GameEngine<TEntities extends GameEngineEntityBaseType = GameEngineEntityBaseType> extends Component<GameEngineProperties<TEntities>, GameEngineState<TEntities>> {
     private timer;
     private touches;
     private screen;
@@ -16,10 +16,10 @@ export default class GameEngine<TEntities extends Record<string | number, GameEn
     private events;
     private touchProcessor;
     private layout;
-    constructor(props: GameEngineProperties);
+    constructor(props: GameEngineProperties<TEntities>);
     componentDidMount(): Promise<void>;
     componentWillUnmount(): void;
-    UNSAFE_componentWillReceiveProps(nextProps: GameEngineProperties): void;
+    UNSAFE_componentWillReceiveProps(nextProps: GameEngineProperties<TEntities>): void;
     clear: () => void;
     start: () => void;
     stop: () => void;
