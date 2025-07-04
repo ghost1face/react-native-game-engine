@@ -3,10 +3,11 @@ import { LayoutChangeEvent, GestureResponderEvent } from "react-native";
 import { GameEngineProperties } from "./types/GameEngineProperties";
 import { GameEngineEntities, GameEngineEntitiesOrResolver } from "./types/GameEngineEntities";
 import { GameEngineEvent } from "./types/GameEngineEvents";
-type GameEngineState = {
-    entities: GameEngineEntities;
+import { GameEngineEntity } from "./types/GameEngineEntity";
+type GameEngineState<TEntities extends Record<string | number, GameEngineEntity>> = {
+    entities: GameEngineEntities<TEntities>;
 };
-export default class GameEngine extends Component<GameEngineProperties, GameEngineState> {
+export default class GameEngine<TEntities extends Record<string | number, GameEngineEntity>> extends Component<GameEngineProperties, GameEngineState<TEntities>> {
     private timer;
     private touches;
     private screen;
@@ -22,7 +23,7 @@ export default class GameEngine extends Component<GameEngineProperties, GameEngi
     clear: () => void;
     start: () => void;
     stop: () => void;
-    swap: (newEntities: GameEngineEntitiesOrResolver) => Promise<void>;
+    swap: (newEntities: GameEngineEntitiesOrResolver<TEntities>) => Promise<void>;
     publish: (e: GameEngineEvent) => void;
     publishEvent: (e: GameEngineEvent) => void;
     dispatch: (e: GameEngineEvent) => void;

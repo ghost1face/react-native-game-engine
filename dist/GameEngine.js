@@ -41,18 +41,20 @@ const react_native_1 = require("react-native");
 const DefaultTimer_1 = __importDefault(require("./DefaultTimer"));
 const DefaultRenderer_1 = __importDefault(require("./DefaultRenderer"));
 const DefaultTouchProcessor_1 = __importDefault(require("./DefaultTouchProcessor"));
-const getEntitiesFromProps = (props) => 
-/* @ts-expect-error this is for backward compatibility */
-props.initState ||
+function getEntitiesFromProps(props) {
+    return (
     /* @ts-expect-error this is for backward compatibility */
-    props.initialState ||
-    /* @ts-expect-error this is for backward compatibility */
-    props.state ||
-    /* @ts-expect-error this is for backward compatibility */
-    props.initEntities ||
-    /* @ts-expect-error this is for backward compatibility */
-    props.initialEntities ||
-    props.entities;
+    props.initState ||
+        /* @ts-expect-error this is for backward compatibility */
+        props.initialState ||
+        /* @ts-expect-error this is for backward compatibility */
+        props.state ||
+        /* @ts-expect-error this is for backward compatibility */
+        props.initEntities ||
+        /* @ts-expect-error this is for backward compatibility */
+        props.initialEntities ||
+        props.entities);
+}
 const isPromise = (obj) => {
     return !!(obj &&
         obj.then &&

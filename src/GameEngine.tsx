@@ -18,24 +18,29 @@ import { TouchEvent } from "./types/TouchEvent";
 import {
   GameEngineEntities,
   GameEngineEntitiesOrResolver,
+  GameEngineEntityBaseType,
 } from "./types/GameEngineEntities";
 import { GameEngineUpdateEventOptionType } from "./types/GameEngineUpdateEventOptionType";
 import { GameEngineEvent } from "./types/GameEngineEvents";
+import { GameEngineEntity } from "./types/GameEngineEntity";
 
-const getEntitiesFromProps = (
-  props: GameEngineProperties
-): GameEngineEntitiesOrResolver =>
-  /* @ts-expect-error this is for backward compatibility */
-  props.initState ||
-  /* @ts-expect-error this is for backward compatibility */
-  props.initialState ||
-  /* @ts-expect-error this is for backward compatibility */
-  props.state ||
-  /* @ts-expect-error this is for backward compatibility */
-  props.initEntities ||
-  /* @ts-expect-error this is for backward compatibility */
-  props.initialEntities ||
-  props.entities;
+function getEntitiesFromProps<T extends GameEngineEntityBaseType>(
+  props: GameEngineProperties<T>
+): GameEngineEntitiesOrResolver<T> {
+  return (
+    /* @ts-expect-error this is for backward compatibility */
+    props.initState ||
+    /* @ts-expect-error this is for backward compatibility */
+    props.initialState ||
+    /* @ts-expect-error this is for backward compatibility */
+    props.state ||
+    /* @ts-expect-error this is for backward compatibility */
+    props.initEntities ||
+    /* @ts-expect-error this is for backward compatibility */
+    props.initialEntities ||
+    props.entities
+  );
+}
 
 const isPromise = (obj: any) => {
   return !!(
@@ -47,14 +52,15 @@ const isPromise = (obj: any) => {
   );
 };
 
-type GameEngineState = {
-  entities: GameEngineEntities;
+type GameEngineState<
+  TEntities extends Record<string | number, GameEngineEntity>
+> = {
+  entities: GameEngineEntities<TEntities>;
 };
 
-export default class GameEngine extends Component<
-  GameEngineProperties,
-  GameEngineState
-> {
+export default class GameEngine<
+  TEntities extends Record<string | number, GameEngineEntity>
+> extends Component<GameEngineProperties, GameEngineState<TEntities>> {
   private timer: GameTimer;
   private touches: TouchEvent[];
   private screen: ScaledSize;
@@ -68,7 +74,7 @@ export default class GameEngine extends Component<
     super(props);
 
     this.state = {
-      entities: {},
+      entities: {} as unknown as TEntities,
     };
 
     this.timer = props.timer || new DefaultTimer();
@@ -83,13 +89,15 @@ export default class GameEngine extends Component<
   }
 
   async componentDidMount() {
-    let entities: GameEngineEntities | null;
-    const initialEntities = getEntitiesFromProps(this.props);
+    let entities: GameEngineEntities<TEntities> | null;
+    const initialEntities = getEntitiesFromProps<TEntities>(
+      this.props as GameEngineProperties<TEntities>
+    );
 
     if (isPromise(initialEntities)) {
       entities = await initialEntities;
     } else {
-      entities = initialEntities as GameEngineEntities;
+      entities = initialEntities as GameEngineEntities<TEntities>;
     }
 
     this.setState(
@@ -133,12 +141,12 @@ export default class GameEngine extends Component<
     this.dispatch({ type: "stopped" });
   };
 
-  swap = async (newEntities: GameEngineEntitiesOrResolver) => {
-    let entities: GameEngineEntities | null;
+  swap = async (newEntities: GameEngineEntitiesOrResolver<TEntities>) => {
+    let entities: GameEngineEntities<TEntities> | null;
     if (isPromise(newEntities)) {
       entities = await newEntities;
     } else {
-      entities = newEntities as GameEngineEntities;
+      entities = newEntities as GameEngineEntities<TEntities>;
     }
 
     this.setState({ entities: entities || {} }, () => {
@@ -184,7 +192,7 @@ export default class GameEngine extends Component<
     const newState = this.props.systems?.reduce(
       (state, sys) => sys(state, args),
       this.state.entities
-    );
+    ) as GameEngineEntities<TEntities>;
 
     this.touches.length = 0;
     this.events.length = 0;
